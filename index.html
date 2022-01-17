@@ -3,19 +3,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+ 
     <title>Drawing app</title>
     <style>
 body {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: white;
     overflow: hidden;
     color: white;
-    border-radius: 15px;
 }
 
+h1 {
+color: green;
+}
 
 .container {
     height: 100%;
@@ -26,9 +27,8 @@ body {
     display: flex;
     flex-direction: column;
     padding: 5px;
-    width: 100px;
-    background-color: gray;
-    border: 6px solid black;
+    width: 70px;
+    background-color: #202020;
 }
 
 #toolbar * {
@@ -40,9 +40,7 @@ body {
 }
 
 #toolbar input {
-    width: 90%;
-    border-radius: 11px;
-    box-shadow: 10px 10px 2px black;
+    width: 100%;
 }
 
 #toolbar button {
@@ -51,41 +49,37 @@ body {
     border-radius: 4px;
     color:white;
     padding: 2px;
-
+}
+#draft{
+    background-color: #1565c0;
+    border: none;
+    border-radius: 4px;
+    color:white;
+    padding: 2px;
 }
     </style>
 </head>
 <body>
-
     <section class="container">
         <div id="toolbar">
-            <button id="startdrawing" onclick="start()">start Drawing</button> 
-                   
+            <h1>Draw.</h1>
             <label for="stroke">Stroke</label>
             <input id="stroke" name='stroke' type="color">
-            <br>
             <label for="lineWidth">Line Width</label>
             <input id="lineWidth" name='lineWidth' type="number" value="5">
-            <br>
-            <br>
-            <label  style="font-size: 16px;">draft size</label>
-            <input type="number" id="numberinput">
-            <br>
-
-            <button id="clear2" onclick="borrador()">draft</button>
-            <button id="clear">Clear all</button>
-            <button id="startdrawing" onclick="stop()">stop Drawing</button> 
+            <input id="numberinput" name="numberinput"type="number" value="5">
+            <button id="clear">Clear</button>
+            
+            <button id="draft" onclick="draft()">draft</button>
         </div>
         <div class="drawing-board">
             <canvas id="drawing-board"></canvas>
         </div>
     </section>
     <script>
-        const numberinput = document.getElementById('numbeinput')
         const canvas = document.getElementById('drawing-board');
 const toolbar = document.getElementById('toolbar');
 const ctx = canvas.getContext('2d');
-const clear = canvas.getContext('2d');
 
 const canvasOffsetX = canvas.offsetLeft;
 const canvasOffsetY = canvas.offsetTop;
@@ -98,37 +92,15 @@ let lineWidth = 5;
 let startX;
 let startY;
 
-const start = () => {  toolbar.addEventListener('click', e => {
+toolbar.addEventListener('click', e => {
     if (e.target.id === 'clear') {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     }
-    canvas.addEventListener('mousedown', (e) => {
-    isPainting = true;
-    startX = e.clientX;
-    startY = e.clientY;
 });
-
-canvas.addEventListener('mouseup', e => {
-    isPainting = false;
-    ctx.stroke();
-    ctx.beginPath();
-});
-
-canvas.addEventListener('mousemove', draw);
-})};
-
-function borrador(){
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = "50px";
-    addEventListener('change', e => {
-    if(e.target.id == 'numberinput'){
-        lineWidth = e.target.value
-    }})
 
 toolbar.addEventListener('change', e => {
     if(e.target.id === 'stroke') {
-        clear.strokeStyle = e.target.value;
+        ctx.strokeStyle = e.target.value;
     }
 
     if(e.target.id === 'lineWidth') {
@@ -136,46 +108,6 @@ toolbar.addEventListener('change', e => {
     }
     
 });
-}
-const stop = () => {  toolbar.addEventListener('click', e => {
-    if (e.target.id === 'clear') {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    }
-    canvas.addEventListener('mousedown', (e) => {
-    isPainting = false;
-    startX = e.clientX;
-    startY = e.clientY;
-});
-
-canvas.addEventListener('mouseup', e => {
-    isPainting = false;
-    ctx.stroke();
-    ctx.beginPath();
-});
-
-canvas.addEventListener('mousemove', draw);
-})};
-
-function borrador(){
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = "50px";
-    addEventListener('change', e => {
-    if(e.target.id == 'numberinput'){
-        lineWidth = e.target.value
-    }})
-
-toolbar.addEventListener('change', e => {
-    if(e.target.id === 'stroke') {
-        clear.strokeStyle = e.target.value;
-    }
-
-    if(e.target.id === 'lineWidth') {
-        lineWidth = e.target.value;
-    }
-    
-});
-}
 
 const draw = (e) => {
     if(!isPainting) {
@@ -189,8 +121,28 @@ const draw = (e) => {
     ctx.stroke();
 }
 
+canvas.addEventListener('mousedown', (e) => {
+    isPainting = true;
+    startX = e.clientX;
+    startY = e.clientY;
+});
+
+canvas.addEventListener('mouseup', e => {
+    isPainting = false;
+    ctx.stroke();
+    ctx.beginPath();
+});
 
 
+canvas.addEventListener('mousemove', draw);
+function draft(){
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = "50px";
+    addEventListener('change', e => {
+    if(e.target.id == 'numberinput'){
+        lineWidth = e.target.value
+    }})
+}
     </script>
 </body>
 </html>
