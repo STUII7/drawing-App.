@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Drawing app</title>
+    <style>
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: white;
+    overflow: hidden;
+    color: white;
+    border-radius: 15px;
+}
+
+
+.container {
+    height: 100%;
+    display: flex;
+}
+
+#toolbar {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 100px;
+    background-color: gray;
+    border: 6px solid black;
+}
+
+#toolbar * {
+    margin-bottom: 6px;
+}
+
+#toolbar label {
+    font-size: 12px;
+}
+
+#toolbar input {
+    width: 90%;
+    border-radius: 11px;
+    box-shadow: 10px 10px 2px black;
+}
+
+#toolbar button {
+    background-color: #1565c0;
+    border: none;
+    border-radius: 4px;
+    color:white;
+    padding: 2px;
+
+}
+    </style>
+</head>
+<body>
+
+    <section class="container">
+        <div id="toolbar">
+            <button id="startdrawing" onclick="start()">start Drawing</button> 
+                   
+            <label for="stroke">Stroke</label>
+            <input id="stroke" name='stroke' type="color">
+            <br>
+            <label for="lineWidth">Line Width</label>
+            <input id="lineWidth" name='lineWidth' type="number" value="5">
+            <br>
+            <br>
+            <label  style="font-size: 16px;">draft size</label>
+            <input type="number" id="numberinput">
+            <br>
+
+            <button id="clear2" onclick="borrador()">draft</button>
+            <button id="clear">Clear all</button>
+            <button id="startdrawing" onclick="stop()">stop Drawing</button> 
+        </div>
+        <div class="drawing-board">
+            <canvas id="drawing-board"></canvas>
+        </div>
+    </section>
+    <script>
+        const numberinput = document.getElementById('numbeinput')
+        const canvas = document.getElementById('drawing-board');
+const toolbar = document.getElementById('toolbar');
+const ctx = canvas.getContext('2d');
+const clear = canvas.getContext('2d');
+
+const canvasOffsetX = canvas.offsetLeft;
+const canvasOffsetY = canvas.offsetTop;
+
+canvas.width = window.innerWidth - canvasOffsetX;
+canvas.height = window.innerHeight - canvasOffsetY;
+
+let isPainting = false;
+let lineWidth = 5;
+let startX;
+let startY;
+
+const start = () => {  toolbar.addEventListener('click', e => {
+    if (e.target.id === 'clear') {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    }
+    canvas.addEventListener('mousedown', (e) => {
+    isPainting = true;
+    startX = e.clientX;
+    startY = e.clientY;
+});
+
+canvas.addEventListener('mouseup', e => {
+    isPainting = false;
+    ctx.stroke();
+    ctx.beginPath();
+});
+
+canvas.addEventListener('mousemove', draw);
+})};
+
+function borrador(){
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = "50px";
+    addEventListener('change', e => {
+    if(e.target.id == 'numberinput'){
+        lineWidth = e.target.value
+    }})
+
+toolbar.addEventListener('change', e => {
+    if(e.target.id === 'stroke') {
+        clear.strokeStyle = e.target.value;
+    }
+
+    if(e.target.id === 'lineWidth') {
+        lineWidth = e.target.value;
+    }
+    
+});
+}
+const stop = () => {  toolbar.addEventListener('click', e => {
+    if (e.target.id === 'clear') {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    }
+    canvas.addEventListener('mousedown', (e) => {
+    isPainting = false;
+    startX = e.clientX;
+    startY = e.clientY;
+});
+
+canvas.addEventListener('mouseup', e => {
+    isPainting = false;
+    ctx.stroke();
+    ctx.beginPath();
+});
+
+canvas.addEventListener('mousemove', draw);
+})};
+
+function borrador(){
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = "50px";
+    addEventListener('change', e => {
+    if(e.target.id == 'numberinput'){
+        lineWidth = e.target.value
+    }})
+
+toolbar.addEventListener('change', e => {
+    if(e.target.id === 'stroke') {
+        clear.strokeStyle = e.target.value;
+    }
+
+    if(e.target.id === 'lineWidth') {
+        lineWidth = e.target.value;
+    }
+    
+});
+}
+
+const draw = (e) => {
+    if(!isPainting) {
+        return;
+    }
+
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = 'round';
+
+    ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+    ctx.stroke();
+}
+
+
+
+    </script>
+</body>
+</html>
